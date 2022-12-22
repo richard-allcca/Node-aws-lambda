@@ -1,0 +1,53 @@
+service: aws-lamda-crud-node
+frameworkVersion: "3"
+
+provider: # - following property will be replaced:
+  name: aws
+  runtime: nodejs14.x
+  region: sa-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:sa-east-1:105795620608:table/TaskTable
+
+functions:
+  hello:
+    handler: src/hello.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  createTask:
+    handler: src/addTask.addTask
+    events:
+      - httpApi:
+          path: /tasks
+          method: post
+  getTasks:
+    handler: src/getTasks.getTasks
+    events:
+      - httpApi:
+          path: /tasks
+          method: get
+  getTask:
+    handler: src/getTask.getTask
+    events:
+      - httpApi:
+        path: /tasks/{id} # parametros entre llaves
+        method: get
+
+resources:
+  Resources:
+    TaskTable: # nombre del recurso
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TaskTable
+        BillingMode: PAY_PER_REQUEST # forma de cobro
+        AttributeDefinitions: # campos que tendra la tabla
+          - AttributeName: id # pasara por un módulo que genera id
+            AttributeType: S # tipo de atributo - string
+        KeySchema: # indica cual sera el primary key
+          - AttributeName: id
+            KeyType: HASH
