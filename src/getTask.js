@@ -9,6 +9,7 @@ const getTask = async (event) => {
 
     const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+    //REVIEW - segun log no puede obtener 'id' 'event.pathParameters' es null
     const { id } = event.pathParameters;
 
     const result = await dynamodb.get({

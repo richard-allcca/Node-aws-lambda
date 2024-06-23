@@ -35,8 +35,8 @@ functions:
     handler: src/getTask.getTask
     events:
       - httpApi:
-        path: /tasks/{id} # parametros entre llaves
-        method: get
+          path: /tasks/{id} # parametros entre llaves
+          method: get
 
 resources:
   Resources:
